@@ -19,6 +19,5 @@
                      (get words word)
                      0)
                  1)]
-    (println "key: " key)
     (assoc network key
       (assoc words word count))))
