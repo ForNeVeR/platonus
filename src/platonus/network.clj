@@ -17,8 +17,8 @@
                 (get network prev-word)
                 {})
         count (+ (if (contains? words next-word)
-                     (get words next-word)
-                     0)
+                   (get words next-word)
+                   0)
                  1)]
     (assoc network prev-word
       (assoc words next-word count))))
@@ -41,7 +41,6 @@
     (->> (seq map)
          (mapcat (fn [[word count]]
                    (repeat count word))))))
-
 
 (defn- get-first-word
   [network]
