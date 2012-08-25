@@ -39,6 +39,14 @@
   [map]
   (first (rand-nth (seq map))))
 
+(defn- random-word
+  [map]
+  (rand-nth 
+    (->> (seq map)
+         (mapcat (fn [[word count]]
+                   (repeat count word))))))
+
+
 (defn- get-first-word
   [network]
   (random-key (get network :phrase-begin)))
@@ -46,7 +54,7 @@
 (defn- get-next-word
   [network prev-word]
   (if (contains? network prev-word)
-    (random-key (get network prev-word)) ;; TODO: Weighted random.
+    (random-word (get network prev-word))
     :phrase-end))
 
 (defn generate
