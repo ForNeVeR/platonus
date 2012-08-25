@@ -1,13 +1,14 @@
 (ns platonus.core
-  (:require [platonus.network :as network])
+  (:require [clojure.java.io :as io]
+            [platonus.network :as network]
+            [platonus.filesystem :as filesystem])
   (:use [clojure.pprint :only (pprint)]))
 
 (defn -main
-  [& args]
-  (let [network (-> (network/create)
-                    (network/add-phrase "hello world")
-                    (network/add-phrase "hello john")
-                    (network/add-phrase "john doe"))]
+  [filename encoding & args]
+  (let [network (filesystem/scan-file (network/create)
+                                      filename
+                                      encoding)]
     (pprint network)
     (pprint (repeatedly 10
               (partial network/generate network)))))
