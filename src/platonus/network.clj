@@ -1,38 +1,50 @@
 (ns platonus.network
   (:require [clojure.string :as string]))
 
-(defn- split-replic
-  [replic]
-  (string/split replic #"\s"))
+;;; Tokens:
+(def phrase-end)
 
+;;; Creation:
 (defn create
   []
   {})
 
-(defn update
-  [network replic]
-  (let [[key word] (split-replic replic)
-        words (if (contains? network key)
-                (get network key)
+;;; Update:
+(defn- split-replic
+  [replic]
+  (string/split replic #"\s"))
+
+(defn- update
+  [network prev-word next-word]
+  (let [words (if (contains? network prev-word)
+                (get network prev-word)
                 {})
-        count (+ (if (contains? words word)
-                     (get words word)
+        count (+ (if (contains? words next-word)
+                     (get words next-word)
                      0)
                  1)]
-    (assoc network key
-      (assoc words word count))))
+    (assoc network prev-word
+      (assoc words next-word count))))
 
+(defn add-phrase
+  [initial-network replic]
+  (let [words (concat (split-replic replic) [phrase-end])
+        pairs (map vector words (drop 1 words))]
+    (reduce (fn [network [prev-word next-word]]
+              (update network prev-word next-word))
+            initial-network
+            pairs)))
+
+;;; Generation:
 (defn- random-key
   [map]
   (first (rand-nth (seq map))))
 
-(defn get-first-word
+(defn- get-first-word
   [network]
   (random-key network))
 
-(def phrase-end)
-
-(defn get-next-word
+(defn- get-next-word
   [network prev-word]
   (if (contains? network prev-word)
     (random-key (get network prev-word)) ;; TODO: Weighted random.

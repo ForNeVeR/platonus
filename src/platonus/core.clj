@@ -5,9 +5,9 @@
 (defn -main
   [& args]
   (let [network (-> (network/create)
-                    (network/update "hello world")
-                    (network/update "hello john")
-                    (network/update "john doe"))]
+                    (network/add-phrase "hello world")
+                    (network/add-phrase "hello john")
+                    (network/add-phrase "john doe"))]
     (pprint network)
     (pprint (network/generate network))
     (pprint (network/generate network))))
