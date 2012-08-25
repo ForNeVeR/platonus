@@ -8,6 +8,10 @@
   [line]
   (re-matches regex line))
 
+(defn- get-nickname
+  [line]
+  (nth (re-matches regex line) 1))
+
 (defn- line-to-phrase
   [line]
   (nth (re-matches regex line) 2))
@@ -18,18 +22,20 @@
                       (line-to-phrase line)))
 
 (defn scan-file
-  [initial-network file encoding]
+  [network nickname file encoding]
   (println "Scanning file" file)
   (with-open [reader (io/reader file :encoding encoding)]
     (reduce add-line
-            initial-network
-            (filter contains-phrase? (line-seq reader)))))
+            network
+            (->> (line-seq reader)
+                 (filter contains-phrase?)
+                 (filter #(= (get-nickname %) nickname))))))
 
 (defn scan-directory
-  [path encoding]
+  [nickname path encoding]
   (let [directory (io/file path)
         network   (network/create)]
-    (reduce #(scan-file %1 %2 encoding)
+    (reduce #(scan-file %1 nickname %2 encoding)
             network
             (->> (file-seq directory)
                  (filter #(not (.isDirectory %)))
