@@ -5,10 +5,14 @@
   (:use [clojure.pprint :only (pprint)]))
 
 (defn -main
-  [filename encoding & args]
-  (let [network (filesystem/scan-file (network/create)
-                                      filename
-                                      encoding)]
-    (pprint network)
-    (pprint (repeatedly 10
-              (partial network/generate network)))))
+  [mode path encoding & args]
+  (let [network (cond
+                  (= mode "-file") (filesystem/scan-file
+                                     (network/create)
+                                     path
+                                     encoding)
+                  (= mode "-directory") (filesystem/scan-directory
+                                          path
+                                          encoding))]
+      (pprint (repeatedly 10
+                (partial network/generate network)))))

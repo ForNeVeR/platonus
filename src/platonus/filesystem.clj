@@ -29,4 +29,8 @@
   [path encoding]
   (let [directory (io/file path)
         network   (network/create)]
-    (reduce scan-file network (file-seq directory))))
+    (reduce #(scan-file %1 %2 encoding)
+            network
+            (->> (file-seq directory)
+                 (filter #(not (.isDirectory %)))
+                 (sort-by #(.getName %))))))
