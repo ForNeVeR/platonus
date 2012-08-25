@@ -1,9 +1,6 @@
 (ns platonus.network
   (:require [clojure.string :as string]))
 
-;;; Tokens:
-(def phrase-end)
-
 ;;; Creation:
 (defn create
   []
@@ -28,7 +25,9 @@
 
 (defn add-phrase
   [initial-network replic]
-  (let [words (concat (split-replic replic) [phrase-end])
+  (let [words (concat [:phrase-begin]
+                      (split-replic replic)
+                      [:phrase-end])
         pairs (map vector words (drop 1 words))]
     (reduce (fn [network [prev-word next-word]]
               (update network prev-word next-word))
@@ -42,18 +41,18 @@
 
 (defn- get-first-word
   [network]
-  (random-key network))
+  (random-key (get network :phrase-begin)))
 
 (defn- get-next-word
   [network prev-word]
   (if (contains? network prev-word)
     (random-key (get network prev-word)) ;; TODO: Weighted random.
-    phrase-end))
+    :phrase-end))
 
 (defn generate
   [network]
   (if (empty? network)
     []
-    (take-while #(not (= % phrase-end))
+    (take-while #(not (= % :phrase-end))
       (iterate (partial get-next-word network)
                (get-first-word network)))))
