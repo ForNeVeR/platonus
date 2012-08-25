@@ -35,10 +35,6 @@
             pairs)))
 
 ;;; Generation:
-(defn- random-key
-  [map]
-  (first (rand-nth (seq map))))
-
 (defn- random-word
   [map]
   (rand-nth 
@@ -49,7 +45,7 @@
 
 (defn- get-first-word
   [network]
-  (random-key (get network :phrase-begin)))
+  (random-word (get network :phrase-begin)))
 
 (defn- get-next-word
   [network prev-word]
