@@ -1,7 +1,6 @@
 (ns platonus.test.network
   (:require [platonus.network :as network])
-  (:use [clojure.test]
-        [clojure.pprint]))
+  (:use [clojure.test]))
 
 (deftest new-network-is-empty
   (let [network (network/create)]
@@ -11,7 +10,6 @@
   (let [network (-> (network/create)
                     (network/add-phrase "ave omnissiah"))
         words   (get network ["ave"])]
-    (pprint network)
     (is (= 1 (get words "omnissiah")))
     (is (= ["ave" "omnissiah"] (network/generate network)))))
 
