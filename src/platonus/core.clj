@@ -9,5 +9,5 @@
                     (network/add-phrase "hello john")
                     (network/add-phrase "john doe"))]
     (pprint network)
-    (pprint (network/generate network))
-    (pprint (network/generate network))))
+    (pprint (repeatedly 10
+              (partial network/generate network)))))
