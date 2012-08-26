@@ -19,6 +19,7 @@
                                           nickname
                                           path
                                           encoding))]
-      (doseq [phrase (repeatedly 20
-                       (partial network/generate network))]
-        (print-phrase phrase))))
+    (println "Network size:" (count network))
+    (doseq [phrase (repeatedly 20
+                     (partial network/generate network))]
+      (print-phrase phrase))))
