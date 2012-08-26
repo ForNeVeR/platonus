@@ -17,3 +17,12 @@
   (let [network (-> (network/create)
                     (network/add-phrase "all hail the machine"))]
     (is (= 1 (get (get network ["all" "hail"]) "the")))))
+
+(deftest network-structure-test
+  (let [network (-> (network/create)
+                    (network/add-phrase "machine spirit"))]
+    (is (= network {[:phrase-begin] {"machine" 1}
+                    ["machine"] {"spirit" 1}
+                    ["spirit"] {:phrase-end 1}
+                    [:phrase-begin "machine"] {"spirit" 1}
+                    ["machine" "spirit"] {:phrase-end 1}}))))
