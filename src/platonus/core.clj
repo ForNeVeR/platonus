@@ -1,8 +1,11 @@
 (ns platonus.core
   (:require [clojure.java.io :as io]
             [platonus.network :as network]
-            [platonus.filesystem :as filesystem])
-  (:use [clojure.pprint :only (pprint)]))
+            [platonus.filesystem :as filesystem]))
+
+(defn- print-phrase
+  [phrase]
+  (apply println phrase))
 
 (defn -main
   [nickname mode path encoding & args]
@@ -16,5 +19,6 @@
                                           nickname
                                           path
                                           encoding))]
-      (pprint (repeatedly 10
-                (partial network/generate network)))))
+      (doseq [phrase (repeatedly 20
+                       (partial network/generate network))]
+        (print-phrase phrase))))
