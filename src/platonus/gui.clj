@@ -1,7 +1,7 @@
 (ns platonus.gui
   (:use seesaw.core))
 
-(defn- load-file
+(defn- load-file-action
   [arg]
   (alert "Placeholder."))
 
@@ -9,7 +9,7 @@
   []
   (menu :text  "File"
         :items [(action :name    "Load..."
-                        :handler load-file)]))
+                        :handler load-file-action)]))
 
 (defn- create-menubar
   []
