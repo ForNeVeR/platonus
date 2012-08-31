@@ -15,10 +15,19 @@
   []
   (menubar :items [(create-file-menu)]))
 
+(defn- create-statusbar
+  []
+  (label "Ready"))
+
+(defn- create-main-panel
+  []
+  (border-panel :north (create-menubar)
+                :south (create-statusbar)))
+
 (defn- create-frame
   []
   (frame :title    "Platonus"
-         :content  (create-menubar)
+         :content  (create-main-panel)
          :on-close :exit))
 
 (defn -main
