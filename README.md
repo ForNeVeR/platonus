@@ -4,8 +4,8 @@ platonus is simple markov network management tool.
 
 Usage
 -----
-    cd platonus
-    lein run <nickname> -directory path encoding
-        # or <nickname> -file      path encoding
+The latest version has the GUI. To run it, execute the following commands in
+your terminal:
 
-It will scan `path`, parse any logs and generate some random phrases for `nickname`.
+    cd platonus
+    lein run
