@@ -58,6 +58,6 @@
   [filename]
   (let [file (io/file filename)]
     (with-open [input-stream   (open-stream file)
-                decoded-format (get-decoded-format input-stream)
                 decoded-stream (decode-stream input-stream)]
-      (play-stream decoded-stream decoded-format))))
+      (let [decoded-format (get-decoded-format input-stream)]
+        (play-stream decoded-stream decoded-format)))))
