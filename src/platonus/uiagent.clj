@@ -3,7 +3,7 @@
 
 (defn create
   []
-  (agent {:network   (network/create)
+  (agent {:network   (network/create-default)
           :on-change []}))
 
 (defn add-change-listener

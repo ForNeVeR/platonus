@@ -34,7 +34,7 @@
 (defn scan-directory
   [nickname path encoding]
   (let [directory (io/file path)
-        network   (network/create)]
+        network   (network/create-default)]
     (reduce #(scan-file %1 nickname %2 encoding)
             network
             (->> (file-seq directory)

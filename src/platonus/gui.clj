@@ -46,7 +46,7 @@
     (uiagent/add-change-listener model
      (fn [network]
        (invoke-now 
-         (config! label :text (str "Records: " (count network))))))
+         (config! label :text (str "Records: " (count (:network network)))))))
     label))
 
 (defn- create-main-panel
