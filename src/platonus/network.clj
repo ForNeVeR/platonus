@@ -1,19 +1,18 @@
 (ns platonus.network
   (:require [clojure.string :as string]))
 
-;;; Parameters:
-(def depth 2)
-
 ;;; Creation:
 (defn create
+  [chain-length tokenizer]
+  {:chain-length chain-length
+   :tokenizer    tokenizer
+   :network      {}})
+
+(defn create-default
   []
-  {})
+  (create 2 #(string/split % #"\s")))
 
 ;;; Update:
-(defn- split-replic
-  [replic]
-  (string/split replic #"\s"))
-
 (defn- update
   [network key next-word]
   (let [words (if (contains? network key)
@@ -40,15 +39,20 @@
         (add-subphrase network prev-words)))))
 
 (defn add-phrase
-  [initial-network replic]
-  (let [words (concat [:phrase-begin]
-                      (split-replic replic)
-                      [:phrase-end])
-        keys  (apply map vector
-                         (map #(concat (drop % words)          ; TODO: temporary solution? Maybe need
-                                       (repeat % :phrase-end)) ; specialized map function. Especially
-                              (range 0 (+ depth 1))))]         ; suspicious is the repeat part.
-    (reduce add-subphrase initial-network keys)))
+  [{chain-length :chain-length
+    tokenizer    :tokenizer
+    network      :network
+    :as initial-network}
+   replic]
+  (assoc initial-network :network
+    (let [words (concat [:phrase-begin]
+                        (tokenizer replic)
+                        [:phrase-end])
+          keys  (apply map vector
+                           (map #(concat (drop % words)          ; TODO: temporary solution? Maybe need
+                                         (repeat % :phrase-end)) ; specialized map function. Especially
+                                (range 0 (+ chain-length 1))))]  ; suspicious is the repeat part.
+      (reduce add-subphrase network keys))))
 
 ;;; Generation:
 (defn- phrase-ends?
@@ -71,17 +75,18 @@
       :phrase-end)))
 
 (defn- resume-phrase
-  [network initial-prev-words]
-  (let [prev-words (take-last depth initial-prev-words)
+  [network chain-length initial-prev-words]
+  (let [prev-words (take-last chain-length initial-prev-words)
         next-word (get-next-word network prev-words)]
     (concat initial-prev-words [next-word])))
 
 (defn generate
-  [network]
+  [{network      :network
+    chain-length :chain-length}]
   (if (empty? network)
     []
     (let [initial-phrase [:phrase-begin]]
-      (->> (iterate (partial resume-phrase network)
+      (->> (iterate (partial resume-phrase network chain-length)
                     initial-phrase)
            (take-while #(not (phrase-ends? %)))
            (last)       ; Taken last of phrase variants.
