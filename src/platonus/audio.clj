@@ -32,7 +32,7 @@
   (let [input-format   (get-stream-format input-stream)]
     (AudioSystem/getAudioInputStream decoded-format input-stream)))
 
-(defn- get-source-data-line
+(defn- ^SourceDataLine get-source-data-line
   [format]
   (let [info (DataLine$Info. SourceDataLine format)
         line (AudioSystem/getLine info)]
@@ -45,7 +45,7 @@
     (let [data (byte-array 4096)]
       (.start line)
       (loop []
-        (let [bytes-read (.read stream data 0 (.length data))]
+        (let [bytes-read (.read stream data 0 (alength data))]
           (if (not (= bytes-read -1))
             (do
               (.write line data 0 bytes-read)
@@ -57,7 +57,7 @@
 (defn play-file
   [filename]
   (let [file (io/file filename)]
-    (with-open [input-stream   (open-stream file)
-                decoded-stream (decode-stream input-stream)]
+    (with-open [input-stream   (open-stream file)]
       (let [decoded-format (get-decoded-format input-stream)]
-        (play-stream decoded-stream decoded-format)))))
+        (with-open [decoded-stream (decode-stream input-stream decoded-format)]
+          (play-stream decoded-stream decoded-format))))))
