@@ -2,6 +2,7 @@
   (:use [seesaw chooser
                  core])
   (:require [clojure.string :as string]
+            [platonus.audio :as audio]
             [platonus.filesystem :as filesystem]
             [platonus.network :as network]
             [platonus.uiagent :as uiagent]))
@@ -16,6 +17,12 @@
         (fn [network]
           (filesystem/scan-file network nickname file encoding))))))
 
+(defn load-audio-file-action
+  [model]
+  (fn [_]
+    (let [file (choose-file)]
+      (audio/play-file file))))
+
 (defn- generate-action
   [model]
   (fn [_]
@@ -27,7 +34,9 @@
   [model]
   (menu :text  "File"
         :items [(action :name    "Load..."
-                        :handler (load-file-action model))]))
+                        :handler (load-file-action model))
+                (action :name    "Load MP3..."
+                        :handler (load-audio-file-action model))]))
 
 (defn- create-network-menu
   [model]
