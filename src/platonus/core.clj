@@ -1,25 +1,17 @@
 (ns platonus.core
   (:require [clojure.java.io :as io]
-            [platonus.network :as network]
-            [platonus.filesystem :as filesystem]))
+            [platonus.audio :as audio]
+            [platonus.network :as network]))
 
-(defn- print-phrase
-  [phrase]
-  (apply println phrase))
+(defn- play-generated
+  [filename]
+  (let [network (audio/create-network-from-file filename)
+        format  (:format network)
+        bytes   (-> network
+                    (network/generate)
+                    (audio/concat-frames))]
+    (audio/play-byte-seq bytes format)))
 
 (defn -main
-  [nickname mode path encoding & args]
-  (let [network (cond
-                  (= mode "-file") (filesystem/scan-file
-                                     nickname
-                                     (network/create)
-                                     path
-                                     encoding)
-                  (= mode "-directory") (filesystem/scan-directory
-                                          nickname
-                                          path
-                                          encoding))]
-    (println "Network size:" (count network))
-    (doseq [phrase (repeatedly 20
-                     (partial network/generate network))]
-      (print-phrase phrase))))
+  [filename & args]
+  (play-generated filename))

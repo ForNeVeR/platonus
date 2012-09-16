@@ -1,6 +1,6 @@
 (ns platonus.gui
   (:use [seesaw chooser
-                 core])
+                core])
   (:require [clojure.string :as string]
             [platonus.audio :as audio]
             [platonus.filesystem :as filesystem]
@@ -20,8 +20,10 @@
 (defn load-audio-file-action
   [model]
   (fn [_]
-    (let [file (choose-file)]
-      (audio/play-file file))))
+    (let [file    (choose-file)
+          network (audio/create-network-from-file file)
+          format  (:format network)]
+      (audio/play-byte-seq (network/generate network) format))))
 
 (defn- generate-action
   [model]
