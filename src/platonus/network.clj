@@ -1,5 +1,10 @@
 (ns platonus.network
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string])
+  (:gen-class
+     :init create-default
+     :state "state"
+     :methods [[addPhrase [String] Object]
+	             [doGenerate [] String]]))
 
 ;;; Creation:
 (defn create
@@ -11,6 +16,10 @@
 (defn create-default
   []
   (create 2 #(string/split % #"\s")))
+
+(defn -create-default
+  []
+  [[] (atom (create-default))])
 
 ;;; Update:
 (defn- update
@@ -44,6 +53,7 @@
     network      :network
     :as initial-network}
    replic]
+  (println initial-network)
   (assoc initial-network :network
     (let [words (concat [:phrase-begin]
                         (tokenizer replic)
@@ -53,6 +63,10 @@
                                          (repeat % :phrase-end)) ; specialized map function. Especially
                                 (range 0 (+ chain-length 1))))]  ; suspicious is the repeat part.
       (reduce add-subphrase network keys))))
+
+(defn -addPhrase
+  [this phrase]
+  (swap! (.state this) add-phrase phrase))
 
 ;;; Generation:
 (defn- phrase-ends?
@@ -91,3 +105,7 @@
            (take-while #(not (phrase-ends? %)))
            (last)       ; Taken last of phrase variants.
            (drop 1))))) ; Dropped the :phrase-begin keyword.
+
+(defn -doGenerate
+  [this]
+  (string/join " " (generate @(.state this))))
