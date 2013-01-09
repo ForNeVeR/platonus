@@ -1,6 +1,7 @@
 (ns platonus.network
   (:require [clojure.string :as string])
   (:gen-class
+     :name "Network"
      :init create-default
      :state "state"
      :methods [[addPhrase [String] Object]
