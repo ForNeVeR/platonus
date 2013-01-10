@@ -16,7 +16,7 @@
 
 (defn create-default
   []
-  (create 2 #(string/split % #"\s")))
+  (create 1 #(string/split % #"\s")))
 
 (defn -create-default
   []
