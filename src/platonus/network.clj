@@ -54,7 +54,6 @@
     network      :network
     :as initial-network}
    replic]
-  (println initial-network)
   (assoc initial-network :network
     (let [words (concat [:phrase-begin]
                         (tokenizer replic)
