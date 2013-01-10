@@ -46,4 +46,5 @@
 
 (defn -scanDirectory
   [nickname path encoding]
-  (scan-directory nickname path encoding))
+  (let [network (platonus.Network.)]
+    (swap! (.state network) (scan-directory nickname path encoding))))
