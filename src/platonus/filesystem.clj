@@ -1,6 +1,9 @@
 (ns platonus.filesystem
   (:require [clojure.java.io :as io]
-            [platonus.network :as network]))
+            [platonus.network :as network])
+  (:gen-class
+     :name    platonus.Filesystem
+     :methods [^{:static true} [scanDirectory [String String String] platonus.Network]]))
 
 (def regex #"^\[.*?\] \* (.*?)(?: \*|:) (.*?)$")
 
@@ -40,3 +43,7 @@
             (->> (file-seq directory)
                  (filter #(not (.isDirectory %)))
                  (sort-by #(.getName %))))))
+
+(defn -scanDirectory
+  [nickname path encoding]
+  (scan-directory nickname path encoding))
