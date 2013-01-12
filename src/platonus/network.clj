@@ -10,8 +10,9 @@
 ;;; Phrase parsing
 (defn parse-phrase
   [phrase]
-  (->> (string/split phrase #"\s")
-       (map #(.intern %))))
+  (doall
+    (->> (string/split phrase #"\s")
+         (map #(.intern %)))))
 
 ;;; Creation:
 (defn create
