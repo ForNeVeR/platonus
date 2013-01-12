@@ -6,7 +6,7 @@
      :init create-default
      :state "state"
      :methods [[addPhrase [String] Object]
-	             [doGenerate [] String]]))
+	             [generate [] String]]))
 
 (defn -create-default
   []
@@ -16,6 +16,6 @@
   [this phrase]
   (swap! (.state this) network/add-phrase phrase))
 
-(defn -doGenerate
+(defn -generate
   [this]
   (string/join " " (network/generate @(.state this))))
