@@ -7,6 +7,11 @@
      :methods [[addPhrase [String] Object]
 	             [doGenerate [] String]]))
 
+;;; Phrase parsing
+(defn parse-phrase
+  [phrase]
+  (string/split phrase #"\s"))
+
 ;;; Creation:
 (defn create
   [chain-length tokenizer]
@@ -16,7 +21,7 @@
 
 (defn create-default
   []
-  (create 1 #(string/split % #"\s")))
+  (create 1 parse-phrase))
 
 (defn -create-default
   []
