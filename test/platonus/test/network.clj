@@ -16,13 +16,13 @@
     (is (= ["ave" "omnissiah"] (network/generate network-obj)))))
 
 (deftest advanced-phrase-test
-  (let [network (-> (network/create-default)
+  (let [network (-> (network/create 2 network/parse-phrase)
                     (network/add-phrase "all hail the machine")
                     (:network))]
     (is (= 1 (get (get network ["all" "hail"]) "the")))))
 
 (deftest network-structure-test
-  (let [network (-> (network/create-default)
+  (let [network (-> (network/create 2 network/parse-phrase)
                     (network/add-phrase "machine spirit")
                     (:network))]
     (is (= network {[:phrase-begin] {"machine" 1}
