@@ -1,11 +1,5 @@
 (ns platonus.network
-  (:require [clojure.string :as string])
-  (:gen-class
-     :name platonus.Network
-     :init create-default
-     :state "state"
-     :methods [[addPhrase [String] Object]
-	             [doGenerate [] String]]))
+  (:require [clojure.string :as string]))
 
 ;;; Phrase parsing
 (defn parse-phrase
@@ -24,10 +18,6 @@
 (defn create-default
   []
   (create 1 parse-phrase))
-
-(defn -create-default
-  []
-  [[] (atom (create-default))])
 
 ;;; Update:
 (defn- update
@@ -71,10 +61,6 @@
                                 (range 0 (+ chain-length 1))))]  ; suspicious is the repeat part.
       (reduce add-subphrase network keys))))
 
-(defn -addPhrase
-  [this phrase]
-  (swap! (.state this) add-phrase phrase))
-
 ;;; Generation:
 (defn- phrase-ends?
   [phrase]
@@ -112,7 +98,3 @@
            (take-while #(not (phrase-ends? %)))
            (last)       ; Taken last of phrase variants.
            (drop 1))))) ; Dropped the :phrase-begin keyword.
-
-(defn -doGenerate
-  [this]
-  (string/join " " (generate @(.state this))))
