@@ -6,8 +6,8 @@
      :init create-default
      :state "state"
      :methods [[addPhrase [String] Object]
-               [generate [] String]]
-               [diff [platonus.Network] Double]))
+               [generate [] String]
+               [diff [platonus.Network] Double]]))
 
 (defn -create-default
   []
