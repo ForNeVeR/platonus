@@ -25,4 +25,4 @@
   [this other]
   (let [network1 @(.state this)
         network2 @(.state other)]
-    (network/diff network1 network2)))
+    (double (network/diff network1 network2))))

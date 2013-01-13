@@ -25,7 +25,7 @@ Here is maven artifact identifier (it is published in the [clojars](https://cloj
     <dependency>
       <groupId>platonus</groupId>
       <artifactId>platonus</artifactId>
-      <version>0.1.16</version>
+      <version>0.1.17</version>
     </dependency>
 
 ### Java API
