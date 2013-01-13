@@ -1,4 +1,4 @@
-(defproject platonus "0.1.15"
+(defproject platonus "0.1.16"
   :description "Simple Markov network library."
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [com.googlecode.soundlibs/mp3spi "1.9.5-1"]
