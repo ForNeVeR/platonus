@@ -30,3 +30,13 @@
                     ["spirit"] {:phrase-end 1}
                     [:phrase-begin "machine"] {"spirit" 1}
                     ["machine" "spirit"] {:phrase-end 1}}))))
+
+(deftest network-diff-test
+  (let [network1 (-> (network/create-default)
+                     (network/add-phrase "a b c d"))
+        network2 (-> (network/create-default)
+                     (network/add-phrase "a b c"))
+        network3 (-> (network/create-default)
+                     (network/add-phrase "a b d"))]
+    (is (= 2 (network/diff network1 network2)))
+    (is (= 2 (network/diff network2 network3)))))

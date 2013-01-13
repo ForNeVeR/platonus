@@ -98,3 +98,8 @@
            (take-while #(not (phrase-ends? %)))
            (last)       ; Taken last of phrase variants.
            (drop 1))))) ; Dropped the :phrase-begin keyword.
+
+;;; Difference:
+(defn diff
+  [network1 network2]
+  nil)

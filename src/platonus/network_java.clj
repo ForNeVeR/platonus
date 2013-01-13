@@ -1,12 +1,13 @@
 (ns platonus.network-java
   (:require [clojure.string :as string]
-  	    [platonus.network :as network])
+  	        [platonus.network :as network])
   (:gen-class
      :name platonus.Network
      :init create-default
      :state "state"
      :methods [[addPhrase [String] Object]
-	             [generate [] String]]))
+               [generate [] String]]
+               [diff [platonus.Network] Integer]))
 
 (defn -create-default
   []
@@ -19,3 +20,9 @@
 (defn -generate
   [this]
   (string/join " " (network/generate @(.state this))))
+
+(defn -diff
+  [this other]
+  (let [network1 @(.state this)
+        network2 @(.state other)]
+    (network/diff network1 network2)))
