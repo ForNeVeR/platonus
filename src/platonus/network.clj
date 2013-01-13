@@ -100,6 +100,47 @@
            (drop 1))))) ; Dropped the :phrase-begin keyword.
 
 ;;; Difference:
+(defn- sum-keys
+  [network1 network2]
+  (-> (keys network1)
+      (concat (keys network2))
+      (set)))
+
+(def map-diff)
+
+(defn- calculate-diff-by-key
+  [network1 network2 key]
+  (let [value1 (get network1 key)
+        value2 (get network2 key)]
+    (cond
+      (or (map? value1)
+          (map? value2)) (map-diff value1 value2)
+      (and (nil? value1)
+           (nil? value2)) 0
+      (nil? value1)       value2
+      (nil? value2)       value1
+      :otherwise          (Math/abs (- value2 value1)))))
+
+(defn- map-diff
+  [map1 map2]
+  (let [keys (sum-keys map1 map2)]
+    (reduce
+      (fn [acc key]
+        (+ acc (calculate-diff-by-key map1 map2 key)))
+      0
+      keys)))
+
+(defn- network-size
+  [network]
+  (->> network
+    (vals)
+    (mapcat vals)
+    (reduce +)))
+
 (defn diff
   [network1 network2]
-  nil)
+  (let [n1 (:network network1)
+        n2 (:network network2)
+        size (+ (network-size n1) (network-size n2))]
+    (/ (map-diff n1 n2)
+       size)))

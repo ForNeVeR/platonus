@@ -38,5 +38,5 @@
                      (network/add-phrase "a b c"))
         network3 (-> (network/create-default)
                      (network/add-phrase "a b d"))]
-    (is (= 2 (network/diff network1 network2)))
-    (is (= 2 (network/diff network2 network3)))))
+    (is (= 3/9 (network/diff network1 network2)))
+    (is (= 4/8 (network/diff network2 network3)))))

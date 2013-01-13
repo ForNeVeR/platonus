@@ -36,6 +36,7 @@ platonus API is deadly simple.
 
 1. `Network.addPhrase` adds phrase to the network.
 2. `Network.generate` generates random network.
+3. `Network.diff` calculates the difference between two networks.
 
 #### Filesystem class
 
