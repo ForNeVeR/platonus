@@ -31,6 +31,17 @@
                     [:phrase-begin "machine"] {"spirit" 1}
                     ["machine" "spirit"] {:phrase-end 1}}))))
 
+(deftest network-normalization-test
+  (let [network (-> (network/create 1 network/parse-phrase)
+                    (network/add-phrase "ave emperor")
+                    (network/add-phrase "ave omnissiah"))
+        normalized (network/normalized network)]
+    (is (= normalized {[:phrase-begin] {"ave" 1}
+                       ["ave"] {"emperor" 1/2
+                                "omnissiah" 1/2}
+                       ["emperor"] {:phrase-end 1}
+                       ["omnissiah"] {:phrase-end 1}}))))
+
 (deftest network-diff-test
   (let [network1 (-> (network/create-default)
                      (network/add-phrase "a b c d"))

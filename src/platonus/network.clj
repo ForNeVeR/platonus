@@ -99,6 +99,17 @@
            (last)       ; Taken last of phrase variants.
            (drop 1))))) ; Dropped the :phrase-begin keyword.
 
+;;; Normalization:
+(defn- normalize-branch
+  [result [key branch]]
+  (let [sum (reduce + (vals branch))]
+    (assoc result
+      key (reduce-kv (fn [r k v] (assoc r k (/ v sum))) {} branch))))
+
+(defn normalized
+  [{network :network}]
+  (reduce normalize-branch {} network))
+
 ;;; Difference:
 (defn- sum-keys
   [network1 network2]
