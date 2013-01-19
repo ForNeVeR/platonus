@@ -1,5 +1,6 @@
 (ns platonus.network
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [clojure.contrib.math :as math]))
 
 ;;; Phrase parsing
 (defn parse-phrase
@@ -100,15 +101,25 @@
            (drop 1))))) ; Dropped the :phrase-begin keyword.
 
 ;;; Normalization:
+(defn- network-size
+  [network]
+  (->> network
+    (vals)
+    (mapcat vals)
+    (reduce +)))
+
 (defn- normalize-branch
-  [result [key branch]]
-  (let [sum (reduce + (vals branch))]
-    (assoc result
-      key (reduce-kv (fn [r k v] (assoc r k (/ v sum))) {} branch))))
+  [size result [key branch]]
+  (assoc result
+    key (reduce-kv (fn [r k v] (assoc r k (/ v size))) {} branch)))
 
 (defn normalized
   [{network :network}]
-  (reduce normalize-branch {} network))
+  (let [size (network-size network)]
+    (reduce
+      (partial normalize-branch size)
+      {}
+      network)))
 
 ;;; Difference:
 (defn- sum-keys
@@ -130,7 +141,7 @@
            (nil? value2)) 0
       (nil? value1)       value2
       (nil? value2)       value1
-      :otherwise          (Math/abs (- value2 value1)))))
+      :otherwise          (math/abs (- value2 value1)))))
 
 (defn- map-diff
   [map1 map2]
@@ -141,17 +152,10 @@
       0
       keys)))
 
-(defn- network-size
-  [network]
-  (->> network
-    (vals)
-    (mapcat vals)
-    (reduce +)))
-
 (defn diff
   [network1 network2]
-  (let [n1 (:network network1)
-        n2 (:network network2)
-        size (+ (network-size n1) (network-size n2))]
+  (let [n1 (normalized network1)
+        n2 (normalized network2)
+        size 2]
     (/ (map-diff n1 n2)
        size)))

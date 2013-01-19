@@ -36,11 +36,11 @@
                     (network/add-phrase "ave emperor")
                     (network/add-phrase "ave omnissiah"))
         normalized (network/normalized network)]
-    (is (= normalized {[:phrase-begin] {"ave" 1}
-                       ["ave"] {"emperor" 1/2
-                                "omnissiah" 1/2}
-                       ["emperor"] {:phrase-end 1}
-                       ["omnissiah"] {:phrase-end 1}}))))
+    (is (= normalized {[:phrase-begin] {"ave" 1/3}
+                       ["ave"] {"emperor" 1/6
+                                "omnissiah" 1/6}
+                       ["emperor"] {:phrase-end 1/6}
+                       ["omnissiah"] {:phrase-end 1/6}}))))
 
 (deftest network-diff-test
   (let [network1 (-> (network/create-default)
@@ -49,5 +49,5 @@
                      (network/add-phrase "a b c"))
         network3 (-> (network/create-default)
                      (network/add-phrase "a b d"))]
-    (is (= 3/9 (network/diff network1 network2)))
+    (is (= 2/5 (network/diff network1 network2)))
     (is (= 4/8 (network/diff network2 network3)))))
