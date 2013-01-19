@@ -2,12 +2,12 @@
   (:require [clojure.string :as string]
   	        [platonus.network :as network])
   (:gen-class
-     :name platonus.Network
-     :init create-default
-     :state "state"
-     :methods [[addPhrase [String] Object]
-               [generate [] String]
-               [diff [platonus.Network] Double]]))
+    :name platonus.Network
+    :init create-default
+    :state "state"
+    :methods [[addPhrase [String] Object]
+              [generate [] String]
+              [diff [Object] Double]]))
 
 (defn -create-default
   []
