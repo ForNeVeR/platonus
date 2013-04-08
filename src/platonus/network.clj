@@ -152,10 +152,49 @@
       0
       keys)))
 
+;(defn diff
+;  [network1 network2]
+;  (let [n1 (normalized network1)
+;        n2 (normalized network2)
+;        size 2]
+;    (/ (map-diff n1 n2)
+;       size)))
+
+(defn- wordset
+  [{network :network}]
+  (reduce
+    (fn [acc map]
+      (merge-with + acc map))
+    {}
+    (vals network)))
+
+(defn- wordset-size
+  [ws]
+  (reduce + (vals ws)))
+
+(defn- wordset-normalize
+  [ws]
+  (let [size (wordset-size ws)]
+    (reduce
+      (fn [acc [k v]]
+        (assoc acc k (/ v size)))
+      {}
+      ws)))
+
+(defn- wordset-diff
+  [ws1 ws2]
+  (let [w1 (wordset-normalize ws1)
+        w2 (wordset-normalize ws2)]
+    (/
+      (->>
+        (merge-with - w1 w2)
+        vals
+        (map #(Math/abs (double %)))
+        (reduce +))
+      2)))
+
 (defn diff
   [network1 network2]
-  (let [n1 (normalized network1)
-        n2 (normalized network2)
-        size 2]
-    (/ (map-diff n1 n2)
-       size)))
+  (let [wordset1 (wordset network1)
+        wordset2 (wordset network2)]
+    (wordset-diff wordset1 wordset2)))
