@@ -1,4 +1,4 @@
-(defproject platonus/platonus "0.1.19"
+(defproject platonus/platonus "0.1.20"
   :description "Simple Markov network library."
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
