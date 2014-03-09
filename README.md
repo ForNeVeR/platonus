@@ -9,7 +9,7 @@ platonus is a simple Markov network management tool.
 Here is maven artifact identifier (it is published in the [fornever.me](http://fornever.me:18080/) repository):
 
     <dependency>
-      <groupId>platonus</groupId>
+      <groupId>me.fornever</groupId>
       <artifactId>platonus</artifactId>
       <version>0.2-SNAPSHOT</version>
     </dependency>
