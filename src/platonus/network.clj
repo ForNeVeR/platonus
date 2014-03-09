@@ -67,6 +67,18 @@
   [phrase]
   (= (last phrase) :phrase-end))
 
+(defn- nearest-key
+  [key-seq partial-key]
+  (let [partial-key   (to-array partial-key)
+        key-length    (alength partial-key)
+        filtered-keys (->> key-seq
+                        (filter (fn [map-key]
+                                  (let [map-key-for-compare (take-last key-length map-key)]
+                                    (= map-key-for-compare (seq partial-key))))))]
+    (if (empty? filtered-keys)
+      nil
+      (rand-nth filtered-keys))))
+
 (defn- random-word
   [map]
   (rand-nth 
@@ -76,11 +88,16 @@
 
 (defn- get-next-word
   [network prev-words]
-  (if (contains? network prev-words)
-    (random-word (get network prev-words))
-    (if (> 1 (count prev-words))
-      (recur network (drop 1 prev-words))
-      :phrase-end)))
+  (let [prev-word-array     (to-array prev-words)
+        prev-words-length   (alength prev-word-array)
+        prev-word-count     (+ (rand-int prev-words-length) 1)
+        prev-words-partial  (take-last prev-word-count prev-words)
+        prev-words          (nearest-key (keys network) prev-words-partial)]
+    (if (contains? network prev-words)
+      (random-word (get network prev-words))
+      (if (> 1 (count prev-words))
+        (recur network (drop 1 prev-words))
+        :phrase-end))))
 
 (defn- resume-phrase
   [network chain-length initial-prev-words]
