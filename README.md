@@ -20,12 +20,12 @@ Use the following command to run test suite:
 
 ### Artifacts
 
-Here is maven artifact identifier (it is published in the [clojars](https://clojars.org/) repository):
+Here is maven artifact identifier (it is published in the [fornever.me](http://fornever.me:18080/) repository):
 
     <dependency>
       <groupId>platonus</groupId>
       <artifactId>platonus</artifactId>
-      <version>0.1.20</version>
+      <version>0.1.21</version>
     </dependency>
 
 ### Java API

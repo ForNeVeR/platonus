@@ -1,4 +1,8 @@
-(defproject platonus/platonus "0.1.21-SNAPSHOT"
+(defproject platonus/platonus "0.1.21"
+  :repositories [["releases" {:url "http://fornever.me:18080/repository/codingteam/"
+                              :sign-releases false}]
+                 ["snapshots" {:url "http://fornever.me:18080/repository/codingteam-snapshots/"
+                               :sign-releases false}]]
   :description "Simple Markov network library."
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/clojure-contrib "1.2.0"]
