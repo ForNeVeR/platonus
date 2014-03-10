@@ -3,7 +3,7 @@ package me.fornever.platonus.tests
 import org.scalatest.{Matchers, FlatSpec}
 import me.fornever.platonus.{PhraseEnd, OrdinarWord, PhraseBegin, Network}
 
-class NetworkSpec extends FlatSpec with Matchers {
+class AddSpec extends FlatSpec with Matchers {
   "A Network" should "have size of 0 if default constructed" in {
     Network().size should equal (0)
   }
