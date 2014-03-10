@@ -63,7 +63,7 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
   private def prepareWordValue(item: (Vector[Word], List[List[Word]])): (Vector[Word], Map[Word, Int]) = {
     val key = item._1
     val finalWords = item._2.map(_.last)
-    val countMap = finalWords.groupBy(w => w).mapValues(_.length)
+    val countMap = finalWords.groupBy(identity).mapValues(_.length)
     (key, countMap)
   }
 }
