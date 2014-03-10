@@ -33,6 +33,7 @@ class AddSpec extends FlatSpec with Matchers {
     val phrase = Vector("1", "2")
     val network = Network(2).add(phrase)
     val structure = Map(
+      Vector(PhraseBegin()) -> Map(OrdinarWord("1") -> 1),
       Vector(PhraseBegin(), OrdinarWord("1")) -> Map(OrdinarWord("2") -> 1),
       Vector(OrdinarWord("1"), OrdinarWord("2")) -> Map(PhraseEnd() -> 1)
     )

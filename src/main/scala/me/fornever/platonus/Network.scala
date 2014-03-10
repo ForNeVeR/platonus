@@ -14,7 +14,15 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       Stream(PhraseBegin()),
       phrase.toStream.map(OrdinarWord),
       Stream(PhraseEnd())
-    )
+    ).toList
+
+    val initialData: Map[Vector[Word], Map[Word, Int]] = (1 to depth - 1).map(
+      length => {
+        val key = words.take(length)
+        val value = words.drop(length).take(1).toList
+        key.toVector -> List(value)
+      }
+    ).toMap.map(prepareWordValue)
 
     val phraseData: Map[Vector[Word], Map[Word, Int]] = words
       .sliding(depth + 1)
@@ -22,7 +30,8 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       .groupBy(getWordsKey)
       .map(prepareWordValue)
 
-    Network(depth, data ++ phraseData)
+    // TODO: use a special map merge function (for summing up the word count).
+    Network(depth, data ++ initialData ++ phraseData)
   }
 
   def generate(): Stream[String] = {
@@ -48,8 +57,8 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
     }
   }
 
-  private def getWordsKey(words: Stream[Word]) = words.take(depth).toVector
-  private def prepareWordValue(item: (Vector[Word], List[Stream[Word]])): (Vector[Word], Map[Word, Int]) = {
+  private def getWordsKey(words: List[Word]) = words.take(depth).toVector
+  private def prepareWordValue(item: (Vector[Word], List[List[Word]])): (Vector[Word], Map[Word, Int]) = {
     val key = item._1
     val finalWords = item._2.map(_.last)
     val countMap = finalWords.groupBy(w => w).mapValues(_.length)
