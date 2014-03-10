@@ -1,7 +1,9 @@
 package me.fornever.platonus
 
 object Network {
-  def apply(depth: Int) = new Network(depth, Map[Vector[Word], Map[Word, Int]]())
+  def apply(): Network = Network(1)
+  def apply(depth: Int): Network = Network(depth, Map[Vector[Word], Map[Word, Int]]())
+  def apply(depth: Int, data: Map[Vector[Word], Map[Word, Int]]) = new Network(depth, data)
 }
 
 class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
@@ -12,14 +14,16 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       Stream(PhraseEnd())
     )
 
-    val newData: Map[Vector[Word], Map[Word, Int]] = words
+    val phraseData: Map[Vector[Word], Map[Word, Int]] = words
       .sliding(depth + 1)
       .toList
       .groupBy(getWordsKey)
       .map(prepareWordValue)
 
-    new Network(depth, newData)
+    Network(depth, data ++ phraseData)
   }
+
+  def size = data.size
 
   private def getWordsKey(words: Stream[Word]) = words.take(depth).toVector
   private def prepareWordValue(item: (Vector[Word], List[Stream[Word]])): (Vector[Word], Map[Word, Int]) = {
