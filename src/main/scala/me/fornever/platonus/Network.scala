@@ -16,6 +16,8 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       Stream(PhraseEnd())
     ).toList
 
+    // initialData generates a "begin -> 1", "begin 1 -> 2" etc. from a phrase "1 2 3". It helps at the initial phrase
+    // generation stage.
     val initialData: Map[Vector[Word], Map[Word, Int]] = (1 to depth - 1).map(
       length => {
         val key = words.take(length)
