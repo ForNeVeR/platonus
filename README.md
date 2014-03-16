@@ -6,13 +6,16 @@ platonus is a simple Markov network management tool.
 
 ### Artifacts
 
-Here is maven artifact identifier (it is published in the [fornever.me](http://fornever.me:18080/) repository):
+To use platonus, add the following to your `build.sbt` file:
 
-    <dependency>
-      <groupId>me.fornever</groupId>
-      <artifactId>platonus</artifactId>
-      <version>0.2-SNAPSHOT</version>
-    </dependency>
+    resolvers ++= Seq(
+      "codingteam" at "http://fornever.me:18080/repository/codingteam",
+      "codingteam-snapshots" at "http://fornever.me:18080/repository/codingteam-snapshots"
+    )
+
+    libraryDependencies ++= Seq(
+      "me.fornever" %% "platonus" % "0.2-SNAPSHOT"
+    )
 
 Note that the `SNAPSHOT` releases may be not up to date. Please prefer stable releases (the ones without the `SNAPSHOT`
 postfix).
