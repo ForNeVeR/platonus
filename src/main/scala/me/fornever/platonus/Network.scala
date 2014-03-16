@@ -1,5 +1,7 @@
 package me.fornever.platonus
 
+import scala.util.Random
+
 object Network {
   def apply(): Network = Network(1)
   def apply(depth: Int): Network = Network(depth, Map[Vector[Word], Map[Word, Int]]())
@@ -12,15 +14,9 @@ object Network {
 
   private def mergeMaps[TKey, TValue, TMap <: Map[TKey, TValue]]
   (map1: TMap, map2: TMap, mergeFunction: (TValue, TValue) => TValue) = {
-    val keys1 = map1.keySet
-    val keys2 = map2.keySet
-
-    val same = keys1.intersect(keys2)
-    val diff = keys2 -- keys1
-
-    val merged = same.map(key => key -> mergeFunction(map1(key), map2(key)))
-
-    map1 ++ merged ++ map2.filterKeys(diff.contains)
+    val intersection = map1.keySet.intersect(map2.keySet)
+    val merged = intersection.map(key => key -> mergeFunction(map1(key), map2(key)))
+    map1 ++ map2 ++ merged
   }
 
   private def mergeWordMaps(map1: Map[Word, Int], map2: Map[Word, Int]): Map[Word, Int] = {
@@ -64,7 +60,22 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       val nextWord = if (nextWordMap.isEmpty) {
         None
       } else {
-        Some(nextWordMap.maxBy(_._2)._1)
+        val sum = nextWordMap.values.sum
+        val position = Random.nextInt(sum)
+
+        def getter(index: Int, iterator: Iterator[(Word, Int)]): Word = {
+          iterator.next() match {
+            case (word, value) =>
+              val nextValue = index + value
+              if (nextValue > position) {
+                word
+              } else {
+                getter(nextValue, iterator)
+              }
+          }
+        }
+
+        Some(getter(0, nextWordMap.toIterator))
       }
 
       nextWord match {
