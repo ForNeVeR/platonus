@@ -4,6 +4,28 @@ object Network {
   def apply(): Network = Network(1)
   def apply(depth: Int): Network = Network(depth, Map[Vector[Word], Map[Word, Int]]())
   def apply(depth: Int, data: Map[Vector[Word], Map[Word, Int]]) = new Network(depth, data)
+
+  def mergeNetworkMaps(map1: Map[Vector[Word], Map[Word, Int]],
+                map2: Map[Vector[Word], Map[Word, Int]]): Map[Vector[Word], Map[Word, Int]] = {
+    mergeMaps(map1, map2, mergeWordMaps)
+  }
+
+  private def mergeMaps[TKey, TValue, TMap <: Map[TKey, TValue]]
+  (map1: TMap, map2: TMap, mergeFunction: (TValue, TValue) => TValue) = {
+    val keys1 = map1.keySet
+    val keys2 = map2.keySet
+
+    val same = keys1.intersect(keys2)
+    val diff = keys2 -- keys1
+
+    val merged = same.map(key => key -> mergeFunction(map1(key), map2(key)))
+
+    map1 ++ merged ++ map2.filterKeys(diff.contains)
+  }
+
+  private def mergeWordMaps(map1: Map[Word, Int], map2: Map[Word, Int]): Map[Word, Int] = {
+    mergeMaps(map1, map2, (v1: Int, v2: Int) => v1 + v2)
+  }
 }
 
 class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
@@ -32,8 +54,7 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       .groupBy(getWordsKey)
       .map(prepareWordValue)
 
-    // TODO: use a special map merge function (for summing up the word count).
-    Network(depth, data ++ initialData ++ phraseData)
+    Network(depth, Network.mergeNetworkMaps(Network.mergeNetworkMaps(data, initialData), phraseData))
   }
 
   def generate(): Stream[String] = {
