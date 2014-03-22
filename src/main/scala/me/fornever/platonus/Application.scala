@@ -21,7 +21,7 @@ object Application extends App {
         val string = scanner.next()
         string match {
           case regex(nick, message) if nick == userName =>
-            network = network.add(message.split("\\s+").toVector)
+            network.add(message.split("\\s+").toVector)
           case _ =>
         }
       }

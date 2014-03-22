@@ -1,33 +1,19 @@
 package me.fornever.platonus
 
 import scala.util.Random
+import scala.collection.mutable
 
 object Network {
   def apply(): Network = Network(1)
-  def apply(depth: Int): Network = Network(depth, Map[Vector[Word], Map[Word, Int]]())
-  def apply(depth: Int, data: Map[Vector[Word], Map[Word, Int]]) = new Network(depth, data)
-
-  def mergeNetworkMaps(map1: Map[Vector[Word], Map[Word, Int]],
-                map2: Map[Vector[Word], Map[Word, Int]]): Map[Vector[Word], Map[Word, Int]] = {
-    mergeMaps(map1, map2, mergeWordMaps)
-  }
-
-  private def mergeMaps[TKey, TValue, TMap <: Map[TKey, TValue]]
-  (map1: TMap, map2: TMap, mergeFunction: (TValue, TValue) => TValue) = {
-    val intersection = map1.keySet.intersect(map2.keySet)
-    val merged = intersection.map(key => key -> mergeFunction(map1(key), map2(key)))
-    map1 ++ map2 ++ merged
-  }
-
-  private def mergeWordMaps(map1: Map[Word, Int], map2: Map[Word, Int]): Map[Word, Int] = {
-    mergeMaps(map1, map2, (v1: Int, v2: Int) => v1 + v2)
-  }
+  def apply(depth: Int): Network = Network(depth, mutable.Map[Vector[Word], mutable.Map[Word, Int]]())
+  def apply(depth: Int, data: mutable.Map[Vector[Word], mutable.Map[Word, Int]]) = new Network(depth, data)
 }
 
-class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
+class Network(val depth: Int,
+              val data: mutable.Map[Vector[Word], mutable.Map[Word, Int]]) {
   def size = data.size
 
-  def add(phrase: Vector[String]): Network = {
+  def add(phrase: Vector[String]) = {
     val words = Stream.concat(
       Stream(PhraseBegin()),
       phrase.toStream.map(OrdinarWord),
@@ -50,7 +36,21 @@ class Network(val depth: Int, val data: Map[Vector[Word], Map[Word, Int]]) {
       .groupBy(getWordsKey)
       .map(prepareWordValue)
 
-    Network(depth, Network.mergeNetworkMaps(Network.mergeNetworkMaps(data, initialData), phraseData))
+    for (pair <- Stream.concat(initialData, phraseData)) {
+      pair match {
+        case (keys, valueMap) =>
+          val values = data.getOrElse(keys, scala.collection.mutable.Map[Word, Int]())
+          data.update(keys, values)
+          for (valueCount <- valueMap) {
+            valueCount match {
+              case (word, count) =>
+                values.update(word, count + values.getOrElse(word, 0))
+            }
+          }
+      }
+    }
+
+    this
   }
 
   def generate(): Stream[String] = {
