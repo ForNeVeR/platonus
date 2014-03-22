@@ -22,4 +22,7 @@ credentials ++= Seq(
   Credentials(Path.userHome / ".ivy2" / ".credentials-codingteam")
 )
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test"
+libraryDependencies ++= Seq(
+  "org.scalatest" % "scalatest_2.10" % "2.1.0" % "test",
+  "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.2"
+)
