@@ -48,9 +48,14 @@ class SuffixTreeSpec extends FlatSpec with Matchers {
     val phrase2 = List(2)
     val tree1 = SuffixTree.create(List(phrase1))
     val tree2 = SuffixTree.create(List(phrase2))
-    val resultTree1 = tree1.append(2, STree)
-    val resultTree2 = tree2.append(tree1)
+    val resultTree1 = tree1.append(2, SuffixTree.empty[Int])
+    val resultTree2 = tree2.append(1, SuffixTree.empty[Int])
     assert(tree1 !== tree2)
+    assert(resultTree1 === resultTree2)
+    assert(resultTree1 === SuffixTree(Map(
+      1 -> SuffixTree.empty[Int],
+      2 -> SuffixTree.empty[Int]
+    )))
   }
 
   it should "have a complex structure when added a phrase with repeating words" in {
