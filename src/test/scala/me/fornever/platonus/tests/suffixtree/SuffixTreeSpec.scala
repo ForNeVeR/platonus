@@ -14,15 +14,16 @@ class SuffixTreeSpec extends FlatSpec with Matchers {
   val end: Word = PhraseEnd()
   val emptyPhrase = List(begin, end)
 
-  it should "have a size of 1 when added an empty phrase" in {
+  it should "have a size of 2 when added an empty phrase" in {
     val tree = SuffixTree.create(List(emptyPhrase))
-    assert(tree.childCount === 1)
+    assert(tree.childCount === 2)
   }
 
   it should "have a simple structure when added an empty phrase" in {
     val tree = SuffixTree.create(List(emptyPhrase))
     assert(tree === SuffixTree(Map(
-      begin -> SuffixTree(Map(end -> SuffixTree.empty[Word]))
+      begin -> SuffixTree(Map(end -> SuffixTree.empty[Word])),
+      end -> SuffixTree.empty[Word]
     )))
   }
 
@@ -40,7 +41,7 @@ class SuffixTreeSpec extends FlatSpec with Matchers {
     val phrase = List(1, 2, 3)
     val tree = SuffixTree.create(List(phrase))
     val branch = SuffixTree.branch(phrase.tail)
-    assert(tree.append(2, branch) === tree)
+    assert(tree.append(1, branch) === tree)
   }
 
   it should "change when added a new branch" in {
