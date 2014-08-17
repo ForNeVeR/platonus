@@ -7,7 +7,7 @@ version := "0.3-SNAPSHOT"
 scalaVersion := "2.10.3"
 
 publishTo <<= version { (v: String) =>
-  val base = "http://fornever.me:18080/repository"
+  val base = "http://archiva.fornever.me/repository"
   val (repoType, repoName) = if (v.trim.endsWith("SNAPSHOT")) {
     ("snapshots", "codingteam-snapshots")
   } else {

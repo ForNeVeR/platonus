@@ -9,8 +9,8 @@ platonus is a simple Markov network management tool.
 To use platonus, add the following to your `build.sbt` file:
 
     resolvers ++= Seq(
-      "codingteam" at "http://fornever.me:18080/repository/codingteam",
-      "codingteam-snapshots" at "http://fornever.me:18080/repository/codingteam-snapshots"
+      "codingteam" at "http://archiva.fornever.me/repository/codingteam",
+      "codingteam-snapshots" at "http://archiva.fornever.me/repository/codingteam-snapshots"
     )
 
     libraryDependencies ++= Seq(
