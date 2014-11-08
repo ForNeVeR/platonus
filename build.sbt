@@ -2,9 +2,9 @@ name := "platonus"
 
 organization := "me.fornever"
 
-version := "0.2"
+version := "0.2.1"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.4"
 
 publishTo <<= version { (v: String) =>
   val base = "http://archiva.fornever.me/repository"
