@@ -14,7 +14,7 @@ To use platonus, add the following to your `build.sbt` file:
     )
 
     libraryDependencies ++= Seq(
-      "me.fornever" %% "platonus" % "0.2"
+      "me.fornever" %% "platonus" % "0.2.1"
     )
 
 Note that the `SNAPSHOT` releases may be not up to date. Please prefer stable releases (the ones without the `SNAPSHOT`
