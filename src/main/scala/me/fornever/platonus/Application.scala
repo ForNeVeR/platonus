@@ -1,20 +1,18 @@
 package me.fornever.platonus
 
-import scalax.file.Path
-import java.util.{Calendar, Scanner}
 import java.io.File
+import java.util.{Calendar, Scanner}
 
 object Application extends App {
   val regex = "^\\[.*?\\] \\* (.*?)(?: \\*|:) (.*?)$".r
-  val path = Path.fromString(args(0))
+  val directory = new File(args(0))
   val userName = args(1)
 
   var network = Network(2)
 
   val dateTime = Calendar.getInstance
   println(s"Started at $dateTime")
-  for (filePath <- path.descendants(depth = 1)) {
-    val file = new File(filePath.path)
+  for (file <- directory.listFiles()) {
     val scanner = new Scanner(file, "UTF-16").useDelimiter("\\r\\n")
     try {
       while (scanner.hasNext) {
@@ -30,7 +28,7 @@ object Application extends App {
     }
 
     val size = network.size
-    println(s"$filePath ok")
+    println(s"${file.getPath} ok")
     println(s"Network size: $size")
   }
 
