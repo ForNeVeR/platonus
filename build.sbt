@@ -4,7 +4,7 @@ organization := "me.fornever"
 
 version := "0.2.1"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.5"
 
 publishTo <<= version { (v: String) =>
   val base = "http://archiva.fornever.me/repository"
