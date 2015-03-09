@@ -1,4 +1,4 @@
-platonus
+platonus [![BuildStatus](https://travis-ci.org/ForNeVeR/platonus.png?branch=develop)](https://travis-ci.org/ForNeVeR/platonus)
 ========
 platonus is a simple Markov network management tool.
 
