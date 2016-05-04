@@ -3,9 +3,8 @@ platonus [![Status Aquana][status-aquana]][andivionian-status-classifier] [![Bui
 
 platonus is a simple Markov network management tool.
 
-## Library
-
-### Artifacts
+Usage
+-----
 
 To use platonus, add the following to your `build.sbt` file (if using sbt
 0.13.6+):
@@ -18,6 +17,11 @@ For older versions of sbt, use the direct personal repository link instead of
 `Resolver.jcenterRepo`:
 
     resolvers += "bintray-fornever-maven" at "http://dl.bintray.com/fornever/maven"
+
+Documentation
+-------------
+
+Check the `docs` directory to read additional documentation.
 
 [andivionian-status-classifier]: https://github.com/ForNeVeR/andivionian-status-classifier
 [build-travis]: https://travis-ci.org/ForNeVeR/platonus
