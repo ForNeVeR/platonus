@@ -14,4 +14,9 @@ class GenerateSpec extends FlatSpec with Matchers {
     val network = Network(2).add(samplePhrase)
     network.generate() should equal (samplePhrase)
   }
+
+  it should "truncate the phrase if called with explicit length" in {
+    val network = Network().add(samplePhrase)
+    network.generate(2) should equal (samplePhrase.take(2))
+  }
 }

@@ -53,34 +53,38 @@ class Network(val depth: Int,
     this
   }
 
-  def generate(): Stream[String] = {
+  def generate(limit: Option[Int]): Stream[String] = {
     def generate(init: Vector[Word]): Vector[Word] = {
-      val key = init.takeRight(depth)
-      val nextWordMap = data.getOrElse(key, Map())
-      val nextWord = if (nextWordMap.isEmpty) {
-        None
+      if (limit.isDefined && init.length > limit.get) {
+        init
       } else {
-        val sum = nextWordMap.values.sum
-        val position = Random.nextInt(sum)
+        val key = init.takeRight(depth)
+        val nextWordMap = data.getOrElse(key, Map())
+        val nextWord = if (nextWordMap.isEmpty) {
+          None
+        } else {
+          val sum = nextWordMap.values.sum
+          val position = Random.nextInt(sum)
 
-        def getter(index: Int, iterator: Iterator[(Word, Int)]): Word = {
-          iterator.next() match {
-            case (word, value) =>
-              val nextValue = index + value
-              if (nextValue > position) {
-                word
-              } else {
-                getter(nextValue, iterator)
-              }
+          def getter(index: Int, iterator: Iterator[(Word, Int)]): Word = {
+            iterator.next() match {
+              case (word, value) =>
+                val nextValue = index + value
+                if (nextValue > position) {
+                  word
+                } else {
+                  getter(nextValue, iterator)
+                }
+            }
           }
+
+          Some(getter(0, nextWordMap.toIterator))
         }
 
-        Some(getter(0, nextWordMap.toIterator))
-      }
-
-      nextWord match {
-        case Some(word @ OrdinarWord(_)) => generate(init :+ word)
-        case _ => init :+ PhraseEnd()
+        nextWord match {
+          case Some(word@OrdinarWord(_)) => generate(init :+ word)
+          case _ => init :+ PhraseEnd()
+        }
       }
     }
 
@@ -90,6 +94,9 @@ class Network(val depth: Int,
       case _ => throw new Exception("Impossible")
     }
   }
+
+  def generate(): Stream[String] = generate(None)
+  def generate(limit: Int): Stream[String] = generate(Some(limit))
 
   private def getWordsKey(words: List[Word]) = words.take(depth).toVector
   private def prepareWordValue(item: (Vector[Word], List[List[Word]])): (Vector[Word], Map[Word, Int]) = {
